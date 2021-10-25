@@ -1,5 +1,5 @@
 import numpy as np
-from costs import *
+from helpers.costs import *
 
 def ridge(y, tx, lambda_):
     """implement ridge regression."""

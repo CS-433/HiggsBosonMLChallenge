@@ -1,5 +1,5 @@
-from costs import calculate_loss
-from sigmoid import *
+from helpers.costs import *
+from helpers.sigmoid import *
 import numpy as np
 
 def calculate_gradient(y, tx, w):

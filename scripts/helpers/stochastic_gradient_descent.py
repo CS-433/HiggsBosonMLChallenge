@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from costs import *
-from proj1_helpers import batch_iter
+from helpers.costs import *
+from helpers.proj1_helpers import batch_iter
 
 def compute_stoch_gradient(y, tx, w):
         e = y - np.dot(tx,w)

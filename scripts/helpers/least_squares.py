@@ -1,4 +1,5 @@
 import numpy as np
+from helpers.costs import *
 
 def least_squares(y, tx):
     
@@ -9,5 +10,6 @@ def least_squares(y, tx):
     
     one = np.dot(x_t,tx)
     two = np.dot(x_t,y)
+    w = np.linalg.solve(one,two)
     
-    return np.linalg.solve(one,two), compute_squared_loss(y,tx,w)
+    return w, compute_squared_loss(y,tx,w)

@@ -16,3 +16,12 @@ def compute_squared_loss(y, tx, w):
     e = y- np.dot(tx,w)
     
     return (1/2*N) * np.sum(e*e) 
+
+def compute_log_likelihood(y,tx,w):
+    """compute the loss: negative log likelihood."""
+    product = np.dot(tx,w)
+    exp = np.exp(product)
+    log = np.log(exp+1)
+    one = y * product
+    diff = log - one
+    return sum(diff)

@@ -29,7 +29,7 @@ def logistic_reg(y, tx,initial_w,max_iter,gamma):
 
     for iter in range(max_iter):
 
-      loss, w = learning_by_gradient_descent(y, tx, w, gamma)
+        loss, w = learning_by_gradient_descent(y, tx, w, gamma)
         
     return w,loss
    

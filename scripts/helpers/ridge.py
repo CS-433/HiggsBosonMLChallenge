@@ -10,4 +10,7 @@ def ridge(y, tx, lambda_):
     one = np.dot(x_t,tx) + Id
     two = np.dot(x_t,y)
     
-    return np.linalg.solve(one,two), compute_squared_loss(y,tx,w)
+    w = np.linalg.solve(one,two)
+    loss = compute_squared_loss(y,tx,w)
+    
+    return w,loss 

@@ -9,7 +9,7 @@ def compute_stoch_gradient(y, tx, w):
         return (-1/N)* np.dot(np.transpose(tx),e)
 
 
-def stochastic_gradient_descent(y, tx, initial_w, batch_size = 1 , max_iters, gamma):
+def stochastic_gradient_descent(y, tx, initial_w, max_iters, gamma,  batch_size = 1 ):
         w = initial_w
         for n_iter in range(max_iters):
             for minibatch_y, minibatch_tx in batch_iter(y, tx, batch_size):

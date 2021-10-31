@@ -2,6 +2,8 @@
 """some helper functions for project 1."""
 import csv
 import numpy as np
+from helpers.processing import *
+from helpers.feature_transformation import *
 
 
 def load_csv_data(data_path, sub_sample=False):
@@ -117,3 +119,25 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
         end_index = min((batch_num + 1) * batch_size, data_size)
         if start_index != end_index:
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
+
+
+def split_test_set(x,degree_jet_0,degree_jet_1,degree_jet_2_3):
+     #create masks to extract each one of the subsets
+    mask0 = x[:,22] == 0
+    mask1 = x[:,22] == 1
+    mask2 = x[:,22] == 2
+    mask3 = x[:,22] == 3
+    mask2_3 = np.logical_or(mask2,mask3)
+    
+    jet_0,_,jet_1,_,jet_2_3,_ = pre_process_data_pipeline(x,np.asarray([]))
+
+    indices_0 = np.asarray(np.where(mask0))
+    indices_1 = np.asarray(np.where(mask1))
+    indices_2_3 = np.asarray(np.where(mask2_3))
+
+    jet_0 = poly_expansion(jet_0,degree_jet_0)
+    jet_1 = poly_expansion(jet_1,degree_jet_1)
+    jet_2_3 = poly_expansion(jet_2_3,degree_jet_2_3)
+
+    return jet_0,indices_0,jet_1,indices_1,jet_2_3,indices_2_3
+

@@ -15,9 +15,13 @@ def groupy_by_jet_num(x,y):
     jet_2_3 = x[mask2_3,:]
     
     #extract the corresponding labels
-    label_0 = y[mask0]
-    label_1 = y[mask1]
-    label_2_3 =  y[mask2_3]
+    label_0 = np.asarray([])
+    label_1 = np.asarray([])
+    label_2_3 =  np.asarray([])
+    if(len(y)>0):
+        label_0 = y[mask0]
+        label_1 = y[mask1]
+        label_2_3 =  y[mask2_3]
     return jet_0, label_0, jet_1, label_1, jet_2_3, label_2_3
 
 
@@ -59,7 +63,7 @@ def standardize(x):
 
 
 #Pipeline for Data Processing (returns three processed datasets according to their PRI_jet_num)
-def pre_process_data_pipeline(tX,y):
+def pre_process_data_pipeline(tX,y = np.asarray([])):
     #group by jet_num
     jet_0, label_0, jet_1, label_1, jet_2_3, label_2_3 = groupy_by_jet_num(tX,y)
     #remove invalid features

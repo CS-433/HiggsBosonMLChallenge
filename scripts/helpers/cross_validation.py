@@ -3,8 +3,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from helpers.costs import *
-from helpers.ridge import ridge
 
 
 def build_k_indices(y, k_fold, seed):
@@ -16,19 +14,42 @@ def build_k_indices(y, k_fold, seed):
     k_indices = [indices[k * interval: (k + 1) * interval] for k in range(k_fold)]
     return np.array(k_indices)
 
-def cross_validation(y, x, k_indices, k, lambda_, degree):
+def split_validation(y, x, k_indices, k):
     """return the loss of ridge regression."""
     # get k'th subgroup in test, others in train
+
     te_indice = k_indices[k]
     tr_indice = k_indices[~(np.arange(k_indices.shape[0]) == k)]
     tr_indice = tr_indice.reshape(-1)
+
     y_te = y[te_indice]
     y_tr = y[tr_indice]
     x_te = x[te_indice]
     x_tr = x[tr_indice]
-    # ridge regression
-    w = ridge(y_tr, tx_tr, lambda_)
-    # calculate the loss for train and test data
-    loss_tr = np.sqrt(2 * compute_squared_loss(y_tr, tx_tr, w))
-    loss_te = np.sqrt(2 * compute_squared_loss(y_te, tx_te, w))
-    return loss_tr, loss_te,w
+    return x_tr, y_tr, x_te,y_te
+
+
+def cross_validation_log_visualization(lambds, mse_tr, mse_te):
+    """visualization the curves of mse_tr and mse_te."""
+    plt.semilogx(lambds, mse_tr, marker=".", color='b', label='train error')
+    plt.semilogx(lambds, mse_te, marker=".", color='r', label='test error')
+    plt.xlabel("lambda")
+    plt.ylabel("rmse")
+    plt.title("cross validation")
+    plt.legend(loc=2)
+    plt.grid(True)
+    plt.savefig("cross_validation")
+    
+def cross_validation_visualization(degrees, mse_tr, mse_te):
+    """visualization the curves of mse_tr and mse_te."""
+    #plt.semilogx(lambds, mse_tr, marker=".", color='b', label='train error')
+    #plt.semilogx(lambds, mse_te, marker=".", color='r', label='test error')
+    #plt.scatter(degrees,mse_tr)
+    plt.scatter(degrees,mse_te)
+    plt.xlabel("degree")
+    plt.ylabel("rmse")
+    plt.title("cross validation")
+    plt.legend(loc=2)
+    plt.grid(True)
+    plt.savefig("cross_validation")   
+    plt.show() 

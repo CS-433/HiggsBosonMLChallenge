@@ -1,6 +1,7 @@
 # Machine Learning Project 1 - Higgs Boson Dataset
 
-This is our attempt to solve the Higgs Boson challenge for the Machine Learning CS-433 Cours at EPFL
+This is our attempt to solve the Higgs Boson challenge for the EPFL Machine Learning CS-433.
+Fall 2021
 
 ## Result:
 

@@ -21,7 +21,7 @@ No external libraries were allowed for this project, except numpy and data-visua
 
 ## Data :
 
-Because the training set is larger than 100mb, we could not directly put it in the git repository. You can find it at the following link:
+Because the training set is larger than 100mb, we could not directly put it in the git repository. You can find the test and trainig sets at the following link:
 https://www.kaggle.com/c/higgs-boson/data
 
 ## Files

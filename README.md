@@ -40,7 +40,3 @@ https://www.kaggle.com/c/higgs-boson/data
 - `project1.ipynb` : jupyter notebook that contains all the steps from data cleansing until submission
 - `Data_Visualization.ipynb` : jupyter notebook were we did all the preliminary data-visualization
 - `run.py` : script that reproduces our final submission
-
-## Results
-
-Our results can be found in the output.csv file

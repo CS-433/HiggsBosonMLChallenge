@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Cross Validation"""
+"""Cross Validation to optimize our hyperparameters"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,10 +32,10 @@ def cartesian_product(a,b):
     """join two arrays together by doing a cartesian product"""
     return np.transpose([np.tile(a,len(b)),np.repeat(b,len(a))])
 
-def cross_validation_ridge(k_fold,tX,labels,seed=1):
+def cross_validation_ridge(k_fold,tX,labels,seed=125):
     """grid-search cross validation to find the best hyperparameters (degree and lambda) for ridge regression with a polynomial     expansion """
     degrees  = np.arange(10)
-    lambdas = np.logspace(-7,0,8)
+    lambdas = np.logspace(-15,0,16)
     degrees_plus_lambdas = cartesian_product(degrees,lambdas)
     
     k_indices = build_k_indices(labels,10,seed)
@@ -47,6 +47,7 @@ def cross_validation_ridge(k_fold,tX,labels,seed=1):
     best_degree = -1
     best_lambda = -1
     
+    #iterate over all possible degree, lambda pairs and keep the best one
     for pair in degrees_plus_lambdas:
         degree = pair[0]
         lambda_ = pair[1]
@@ -54,12 +55,21 @@ def cross_validation_ridge(k_fold,tX,labels,seed=1):
         rmse_tr_temp = []
         rmse_te_temp = []
     
-          
+        #go over all possible folds for each hyperparameter combination and compute the mean error  
         for k in range(k_fold):
+            #create training and validation set
             x_tr,y_tr,x_te,y_te = split_validation(labels,tX,k_indices,k)
-
+            
+            #polynomial expansion with the degree hyperparameter
             x_tr = poly_expansion(x_tr,degree)
             x_te = poly_expansion(x_te,degree)
+            
+            #log transformation on the expanded matrix
+            x_tr_log = log_transform(x_tr, np.arange(x_tr.shape[1]))
+            x_te_log = log_transform(x_te, np.arange(x_te.shape[1]))
+            
+            x_tr = np.c_[x_tr,x_tr_log]
+            x_te = np.c_[x_te,x_te_log]
 
             weights, _ = ridge(y_tr, x_tr, lambda_)
             #weights_te, loss_te = ridge(y_te, x_te, lambda_)
@@ -72,7 +82,8 @@ def cross_validation_ridge(k_fold,tX,labels,seed=1):
 
         rmse_tr_mean = np.mean(rmse_tr_temp)
         rmse_te_mean = np.mean(rmse_te_temp)
-
+        
+        #if we get a new smallest rmse, keep track of the parameters that gave us the optimal solution
         if(rmse_te_mean < best):
             best = rmse_te_mean
             best_degree = degree
@@ -87,6 +98,8 @@ def cross_validation_ridge(k_fold,tX,labels,seed=1):
 
 
 
+# ******************************************************************************************************** #
+# ************************** CROSS VALIDATION VISUALIZATION METHODS ************************************** #
 def cross_validation_log_visualization(lambds, mse_tr, mse_te):
     """visualization the curves of mse_tr and mse_te."""
     plt.semilogx(lambds, mse_tr, marker=".", color='b', label='train error')

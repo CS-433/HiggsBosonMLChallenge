@@ -1,7 +1,9 @@
 import numpy as np
+"""Functions used to to various pre-processing steps to clean our dataset. Everything is nicely put together in the pre_process_data_pipeline"""
 
-#Group the data into three sets, depending on whether their PRI_jet_num is {0,1,(2|3)} and return the created sets => also return the corresponding y's
+
 def groupy_by_jet_num(x,y):
+    """Group the data into three sets, depending on whether their PRI_jet_num is {0,1,(2|3)} and return the created sets => also return the corresponding y's"""
     #create masks to extract each one of the subsets
     mask0 = x[:,22] == 0
     mask1 = x[:,22] == 1
@@ -25,8 +27,8 @@ def groupy_by_jet_num(x,y):
     return jet_0, label_0, jet_1, label_1, jet_2_3, label_2_3
 
 
-#For each one of the three sets, filter out the columns (features) that have only invalid (-999) values
 def remove_invalid_features(jet_0,jet_1,jet_2_3):
+    """For each one of the three sets, filter out the columns (features) that have only invalid (-999) values"""
     #we create a mask of the columns that are invalid for each subset
     invalid_jet_1 = [4,5,6,12,22,23,24,25,26,27,28,29]
     invalid_jet_2 = [4,5,6,12,22,26,27,28]
@@ -40,6 +42,7 @@ def remove_invalid_features(jet_0,jet_1,jet_2_3):
     
 
 def remove_outliers(x):
+    """Go through every column and check if there are still invalid values (-999). If there are any, replace them by the median of the column"""
     #go through every column and calculate it's mean
     nbColumns = x.shape[1]
     for i in range(nbColumns):
@@ -53,17 +56,19 @@ def remove_outliers(x):
         x[:,i][indices] = median
     return x
 
-#Standardization of the data
 def standardize(x):
+    """Standardize the dataset i.e. substract the mean and divide by the standard deviation"""
     mean_x = np.mean(x)
     x = x - mean_x
     std_x = np.std(x)
     x = x / std_x
     return x, mean_x, std_x
 
+   
 
-#Pipeline for Data Processing (returns three processed datasets according to their PRI_jet_num)
 def pre_process_data_pipeline(tX,y = np.asarray([])):
+    """Pipeline for Data Processing (returns three processed datasets according to their PRI_jet_num and their corresponding labels). This methods basically puts together all the processing steps and makes it easier to call them all together"""
+
     #group by jet_num
     jet_0, label_0, jet_1, label_1, jet_2_3, label_2_3 = groupy_by_jet_num(tX,y)
     #remove invalid features

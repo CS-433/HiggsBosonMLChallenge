@@ -122,7 +122,7 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
 
 
 def split_test_set(x,degree_jet_0,degree_jet_1,degree_jet_2_3):
-     #create masks to extract each one of the subsets
+    """Apply the same transformation that we applied to the training set to the set """
     mask0 = x[:,22] == 0
     mask1 = x[:,22] == 1
     mask2 = x[:,22] == 2
@@ -138,6 +138,12 @@ def split_test_set(x,degree_jet_0,degree_jet_1,degree_jet_2_3):
     jet_0 = poly_expansion(jet_0,degree_jet_0)
     jet_1 = poly_expansion(jet_1,degree_jet_1)
     jet_2_3 = poly_expansion(jet_2_3,degree_jet_2_3)
+    
+    #********************************addeded this
+    #jet_0 = log_transform(jet_0, np.arange(jet_0.shape[1]))
+    #jet_1 = log_transform(jet_1, np.arange(jet_1.shape[1]))
+    #jet_2_3 = log_transform(jet_2_3, np.arange(jet_2_3.shape[1]))
+    #********************************addeded this
 
     return jet_0,indices_0,jet_1,indices_1,jet_2_3,indices_2_3
 
